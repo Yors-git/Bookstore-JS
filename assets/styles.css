@@ -1,3 +1,8 @@
+/* General */
+.btn-outline-danger {
+  margin: 0 15px;
+}
+
 .popup {
   position: fixed;
   z-index: 1;
