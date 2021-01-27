@@ -3,6 +3,16 @@
   margin: 0 3px;
 }
 
+.book-exist-error {
+  background-color: red;
+  color: white;
+  display: none;
+}
+
+.error--active {
+  display: block;
+}
+
 .popup {
   position: fixed;
   z-index: 1;
