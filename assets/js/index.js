@@ -1,5 +1,5 @@
 class Book {
-  constructor(title = 'Unknown', author = 'Unknown', numOfPages = 0, read = false){
+  constructor(title = 'Unknown', author = 'Unknown', numOfPages = '0', read = false){
     this.title = title
     this.author = author
     this.numOfPages = numOfPages
@@ -7,27 +7,28 @@ class Book {
   }
 }
 
-//Manage book objects
-
 let myLibrary = [
   {
     title: 'First title',
     author: 'First author',
-    numOfPages: 333,
+    numOfPages: '333',
     read: false
   },
   {
     title: 'Second title',
     author: 'Second author',
-    numOfPages: 444,
-    read: false
+    numOfPages: '444',
+    read: true
   }
 ]
 
+//Manage book objects
+
 const createNewBook = (newBook) => {
-  if (myLibrary.some((book) => book.title === newBook.title)) return false;
+  if (myLibrary.some((book) => book.title === newBook.title)) 
+  return false;
   myLibrary.push(newBook);
-  saveLocal();
+  // saveLocal();
   return true;
 }
 
@@ -36,7 +37,7 @@ const deleteBook = (bookTitle) => {
   saveLocal();
 }
 
-function getBook(bookTitle) {
+const getBook = (bookTitle) => {
   for (let book of myLibrary) {
     if (book.title === bookTitle) {
       return book;
@@ -47,8 +48,6 @@ function getBook(bookTitle) {
 
 // Show Books 
 
-const allBooks = document.querySelector('.row')
-
 const showBooks = () => {
   resetGrid();
   for (let element of myLibrary) {
@@ -57,17 +56,12 @@ const showBooks = () => {
 }
 
 const resetGrid = () => {
-  allBooks.innerHTML = "";
+  allBooks.innerHTML = '';
 }
 
+const allBooks = document.querySelector('.row')
 
-// const showBooks = () => {
-//   for( let i = 0; i<= myLibrary.length; i++){
-//     card.appendChild(myLibrary)
-//   }
-// }
-
-//  Create Book Card
+// Create Book Card
 
 const bookHtml = (book) => {
   const bookCard = document.createElement('div')
@@ -88,7 +82,7 @@ const bookHtml = (book) => {
   title.textContent = `Title: ${book.title}`
   author.textContent = `Author: ${book.author}`
   pages.textContent = `Number of pages: ${book.numOfPages}`
-  if (book.isRead) {
+  if (book.read) {
     readBtn.textContent = 'Already Read'
   } else {
     readBtn.textContent = 'Not Read'
@@ -102,7 +96,6 @@ const bookHtml = (book) => {
   cardContent.appendChild(deleteBtn)
   bookCard.appendChild(cardContent)
   allBooks.appendChild(bookCard)
-
 }
 
 // Show New Book Form
@@ -119,14 +112,37 @@ window.addEventListener("keydown", (e) => {
 });
 
 function openPopup() {
-  // form.reset();
-  popup.classList.add("popup--active");
-  overlay.classList.add("overlay--active");
+  form.reset();
+  popup.classList.add("popup--active")
+  overlay.classList.add("overlay--active")
 }
 
 function closePopup() {
-  popup.classList.remove("popup--active");
-  overlay.classList.remove("overlay--active");
+  popup.classList.remove("popup--active")
+  overlay.classList.remove("overlay--active")
+}
+
+// Manage form inputs
+
+const form = document.querySelector(".new-book-form")
+form.addEventListener("submit", addBook);
+
+function addBook(e) {
+  e.preventDefault();
+  if (createNewBook(formInputs())) {
+    showBooks()
+    closePopup()
+  } else {
+    alert("Book already in library, try enter another one")
+  }
+}
+
+function formInputs() {
+  const title = document.querySelector("#title").value
+  const author = document.querySelector("#author").value
+  const pages = document.querySelector("#numOfPages").value
+  const read = document.querySelector("#read").checked
+  return new Book(title, author, pages, read)
 }
 
 showBooks()
