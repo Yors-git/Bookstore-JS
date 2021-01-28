@@ -1,3 +1,17 @@
+/* eslint-disable no-undef */
+const firebaseConfig = {
+  apiKey: 'AIzaSyBht5OtBb2zLnSSnf0ZRWm8eanAIeswNSA',
+  authDomain: 'bookstore-js.firebaseapp.com',
+  projectId: 'bookstore-js',
+  storageBucket: 'bookstore-js.appspot.com',
+  messagingSenderId: '93931593699',
+  appId: '1:93931593699:web:875342299c5ef877c48ad6',
+};
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database();
+
 class Book {
   constructor(title = 'Unknown', author = 'Unknown', numOfPages = '0', read = false) {
     this.title = title;
@@ -7,27 +21,14 @@ class Book {
   }
 }
 
-const myLibrary = [
-  {
-    title: 'First title',
-    author: 'First author',
-    numOfPages: '333',
-    read: false,
-  },
-  {
-    title: 'Second title',
-    author: 'Second author',
-    numOfPages: '444',
-    read: true,
-  },
-];
+let myLibrary = [];
 
 // Manage book objects
 
 const createNewBook = (newBook) => {
   if (myLibrary.some((book) => book.title === newBook.title)) return false;
   myLibrary.push(newBook);
-  // saveLocal();
+  database.ref('LibraryDatabase').set({ myLibrary });
   return true;
 };
 
@@ -77,23 +78,29 @@ const bookHtml = (book) => {
 // Show Books
 
 const showBooks = () => {
-  allBooks.innerHTML = '';
-  for (let i = 0; i < myLibrary.length; i += 1) {
-    bookHtml(myLibrary[i]);
-  }
+  const libraryData = database.ref('LibraryDatabase/');
+  libraryData.on('value', (snapshot) => {
+    myLibrary = snapshot.val().myLibrary;
+    allBooks.innerHTML = '';
+    for (let i = 0; i < myLibrary.length; i += 1) {
+      bookHtml(myLibrary[i]);
+    }
+  });
 };
 
 const deleteBook = (index) => {
   myLibrary.splice(index, 1);
+  database.ref('LibraryDatabase').update({ myLibrary });
   showBooks();
-  // saveLocal();
 };
 
 const toggleRead = (index) => {
   if (myLibrary[index].read === false) {
     myLibrary[index].read = true;
+    database.ref('LibraryDatabase').update({ myLibrary });
   } else {
     myLibrary[index].read = false;
+    database.ref('LibraryDatabase').update({ myLibrary });
   }
   showBooks();
 };
@@ -147,6 +154,7 @@ function addBook(e) {
     closePopup();
   } else {
     showBookRepeated();
+    showBooks();
   }
 }
 
