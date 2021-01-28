@@ -1,6 +1,6 @@
 # JavaScript Project - Library App 
 
->  In this project I built a small JS app to keep track of read books, the user can enter books with its title, author number of pages and wether if the book is alreadey read or not, the user can also delete books from the inventory.
+>  In this project I built a small JS app to keep track of read books, the user can enter books with its title, author number of pages and whether if the book is already read or not, the user can also delete books from the inventory.
 ## Screenshot
 
 ![img](./assets/images/Screenshot.png)
