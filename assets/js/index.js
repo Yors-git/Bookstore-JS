@@ -12,14 +12,9 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
-class Book {
-  constructor(title = 'Unknown', author = 'Unknown', numOfPages = '0', read = false) {
-    this.title = title;
-    this.author = author;
-    this.numOfPages = numOfPages;
-    this.read = read;
-  }
-}
+const bookFactory = (title, author, numOfPages, read) => {
+  return { title, author, numOfPages, read };
+};
 
 let myLibrary = [];
 
@@ -122,7 +117,7 @@ function formInputs() {
   const author = document.querySelector('#author').value;
   const pages = document.querySelector('#numOfPages').value;
   const read = document.querySelector('#read').checked;
-  return new Book(title, author, pages, read);
+  return bookFactory(title, author, pages, read);
 }
 
 const form = document.querySelector('.new-book-form');
